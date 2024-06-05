@@ -8,7 +8,8 @@ from PIL import Image
 class ImageClassifier:
     def __init__(self, model_dir):
         self.device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
-        self.model = torch.load(model_dir).to(self.device).eval()
+        # self.model = torch.load(model_dir).to(self.device).eval()
+        self.model = torch.jit.load(model_dir).to(self.device).eval()
         self.data_transforms = transforms.Compose([
             transforms.Resize(224),
             transforms.CenterCrop(224),
@@ -32,7 +33,7 @@ class ImageClassifier:
         return result
 
 
-classifier = ImageClassifier(model_dir='trained-models/transfer-learning-model.pth')
+classifier = ImageClassifier(model_dir='trained-models/scripted_model.pth')
 
 listFiles = os.listdir('data/test/')
 sumTime = 0
